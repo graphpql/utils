@@ -23,7 +23,7 @@ composer require infinityloop-dev/utils
 
 ### Json
 
-Json wrapper which allows you to work with Json as it was array. Decoding and encoding is fully lazy.
+Json wrapper which allows you to work with Json as if it was array. Decoding and encoding is fully lazy.
 
 ```
 $json = Json::fromString($jsonString);      // (no decoding is done at this step)
