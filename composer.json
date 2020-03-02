@@ -18,5 +18,10 @@
     "psr-4": {
       "Infinityloop\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Infinityloop\\Tests\\": "tests/"
+    }
   }
 }
