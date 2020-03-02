@@ -1,0 +1,21 @@
+{
+  "name": "infinityloop-dev/utils",
+  "description": "Common utils for infinityloop packages.",
+  "homepage": "https://www.infinityloop.dev/",
+  "type": "library",
+  "license": ["MIT"],
+  "authors": [
+    {
+      "name": "Václav Pelíšek",
+      "homepage": "https://www.peldax.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+  },
+  "autoload": {
+    "psr-4": {
+      "Infinityloop\\": "src/"
+    }
+  }
+}
