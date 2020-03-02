@@ -88,7 +88,7 @@ final class CaseConverterTest extends \PHPUnit\Framework\TestCase
     public function testInverse(string $test, array $expected) : void
     {
         $snake = \App\Helper\CaseConverter::toSnakeCase($test);
-        self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\UtilsCaseConverter::toPascalCase($snake)));
+        self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toPascalCase($snake)));
         self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toCamelCase($snake)));
         self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toKebabCase($snake)));
 
@@ -104,7 +104,7 @@ final class CaseConverterTest extends \PHPUnit\Framework\TestCase
 
         $kebab = \App\Helper\CaseConverter::toKebabCase($test);
         self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toPascalCase($kebab)));
-        self::assertSame($kebab, \Infinityloop\UtilsCaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toCamelCase($kebab)));
+        self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toCamelCase($kebab)));
         self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toSnakeCase($kebab)));
     }
 
