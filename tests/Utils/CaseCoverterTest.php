@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Inifnityloop\Utils\Tests;
+namespace Inifnityloop\Tests\Utils;
 
 final class CaseConverterTest extends \PHPUnit\Framework\TestCase
 {
