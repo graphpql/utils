@@ -87,22 +87,22 @@ final class CaseConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testInverse(string $test, array $expected) : void
     {
-        $snake = \App\Helper\CaseConverter::toSnakeCase($test);
+        $snake = \Infinityloop\Utils\CaseConverter::toSnakeCase($test);
         self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toPascalCase($snake)));
         self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toCamelCase($snake)));
         self::assertSame($snake, \Infinityloop\Utils\CaseConverter::toSnakeCase(\Infinityloop\Utils\CaseConverter::toKebabCase($snake)));
 
-        $pascal = \App\Helper\CaseConverter::toPascalCase($test);
+        $pascal = \Infinityloop\Utils\CaseConverter::toPascalCase($test);
         self::assertSame($pascal, \Infinityloop\Utils\CaseConverter::toPascalCase(\Infinityloop\Utils\CaseConverter::toSnakeCase($pascal)));
         self::assertSame($pascal, \Infinityloop\Utils\CaseConverter::toPascalCase(\Infinityloop\Utils\CaseConverter::toCamelCase($pascal)));
         self::assertSame($pascal, \Infinityloop\Utils\CaseConverter::toPascalCase(\Infinityloop\Utils\CaseConverter::toKebabCase($pascal)));
 
-        $camel = \App\Helper\CaseConverter::toCamelCase($test);
+        $camel = \Infinityloop\Utils\CaseConverter::toCamelCase($test);
         self::assertSame($camel, \Infinityloop\Utils\CaseConverter::toCamelCase(\Infinityloop\Utils\CaseConverter::toPascalCase($camel)));
         self::assertSame($camel, \Infinityloop\Utils\CaseConverter::toCamelCase(\Infinityloop\Utils\CaseConverter::toSnakeCase($camel)));
         self::assertSame($camel, \Infinityloop\Utils\CaseConverter::toCamelCase(\Infinityloop\Utils\CaseConverter::toKebabCase($camel)));
 
-        $kebab = \App\Helper\CaseConverter::toKebabCase($test);
+        $kebab = \Infinityloop\Utils\CaseConverter::toKebabCase($test);
         self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toPascalCase($kebab)));
         self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toCamelCase($kebab)));
         self::assertSame($kebab, \Infinityloop\Utils\CaseConverter::toKebabCase(\Infinityloop\Utils\CaseConverter::toSnakeCase($kebab)));
