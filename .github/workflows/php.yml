@@ -19,12 +19,20 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: PHPUnit (php-actions)
-      uses: php-actions/phpunit@v1
-      #with:
-        # Configuration file location
-        #config: # optional, default is test/phpunit/phpunit.xml
-        # JUnit output file location
-        #junit: # optional, default is test/phpunit/_junit/junit.xml
-        # Memory limit
-        #memory: # optional, default is 512M
+    - name: Cache dependencies
+      uses: actions/cache@v1
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    - name: Tests
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: mbstring, intl
+        ini-values: post_max_size=256M
+        coverage: xdebug    
+        tools: php-cs-fixer, phpunit, phpstan
+      env:
+        update: true
