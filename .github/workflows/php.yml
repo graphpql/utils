@@ -13,6 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: mbstring, intl
+        ini-values: post_max_size=256M
+        coverage: xdebug    
+        tools: php-cs-fixer, phpunit, phpstan
+      env:
+        update: true
+
     - name: Validate composer.json and composer.lock
       run: composer validate
 
@@ -30,16 +41,5 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        extensions: mbstring, intl
-        ini-values: post_max_size=256M
-        coverage: xdebug    
-        tools: php-cs-fixer, phpunit, phpstan
-      env:
-        update: true
-    
     - name: Tests
-      run: php vendor/bin/phpunit --coverage-text
+      run: php bin/phpunit --coverage-text
