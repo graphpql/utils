@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     
-    - name: Tests
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
@@ -40,3 +40,6 @@ jobs:
         tools: php-cs-fixer, phpunit, phpstan
       env:
         update: true
+    
+    - name: Tests
+      run: php vendor/bin/phpunit --coverage-text
