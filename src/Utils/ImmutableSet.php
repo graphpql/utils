@@ -63,4 +63,13 @@ abstract class ImmutableSet implements \Iterator, \ArrayAccess, \Countable
     {
         throw new \Exception();
     }
+    
+    protected function appendUnique($offset, $value)
+    {
+        if ($this->offsetExists($offset)) {
+            throw new \Exception();
+        }
+
+        $this->array[$offset] = $value;
+    }
 }
