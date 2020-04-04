@@ -25,7 +25,7 @@ abstract class ImmutableSet implements \Iterator, \ArrayAccess, \Countable
         \next($this->array);
     }
 
-    public function key() : int
+    public function key()
     {
         return \key($this->array);
     }
