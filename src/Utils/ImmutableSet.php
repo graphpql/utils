@@ -10,6 +10,11 @@ abstract class ImmutableSet implements \Iterator, \ArrayAccess, \Countable
 
     protected array $array = [];
 
+    protected function __construct(array $data)
+    {
+        $this->array = $data;
+    }
+
     public function current()
     {
         return \current($this->array);
@@ -56,18 +61,18 @@ abstract class ImmutableSet implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $value) : void
     {
-        throw new \Exception();
+        throw new \Exception('Unsupported operation.');
     }
 
     public function offsetUnset($offset) : void
     {
-        throw new \Exception();
+        throw new \Exception('Unsupported operation.');
     }
-    
+
     protected function appendUnique($offset, $value)
     {
         if ($this->offsetExists($offset)) {
-            throw new \Exception();
+            throw new \Exception('Duplicated item.');
         }
 
         $this->array[$offset] = $value;
