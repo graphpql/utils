@@ -32,3 +32,5 @@ jobs:
 
     - name: Mutation tests
       run: composer run-script infection
+      env:
+        STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
