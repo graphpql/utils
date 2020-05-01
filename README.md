@@ -49,3 +49,36 @@ CaseConverter::toSnakeCase($string);        // foo_bar_baz_foo_123_baz
 CaseConverter::toKebabCase($string);        // foo-bar-baz-foo-123-baz
 CaseConverter::splitWords($string);         // [ foo, bar, baz, foo, 123, baz ]
 ```
+
+### ClassSet
+
+Typesafe array of objects of a same type.
+
+```
+class Foo { public string $name; public function __construct(string $name) { $this->name = $name; } }
+class FooSet extends ObjectSet { protected const INNER_CLASS = Foo::class; }
+
+$set = new FooSet([new Foo(), new Bar(), new Baz()]); // error
+
+// automaticaly generated index keys
+$set = new FooSet([new Foo('foo1'), new Foo('foo2'), new Foo('foo3')]);
+echo $set[0]->name; // foo1
+echo $set[1]->name; // foo2
+echo $set[2]->name; // foo3
+
+class NamedFooSet extends ObjectSet 
+{ 
+    protected const INNER_CLASS = Foo::class; 
+
+    protected function getKey($fooObject)
+    {
+        return $fooObject->name;
+    }
+}
+
+// named keys
+$set = new NamedFooSet([new Foo('foo1'), new Foo('foo2'), new Foo('foo3')]);
+echo $set['foo1']->name; // foo1
+echo $set['foo2']->name; // foo2
+echo $set['foo3']->name; // foo3
+```
