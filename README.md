@@ -1,4 +1,4 @@
-# Utils
+# Utils [![PHP](https://github.com/infinityloop-dev/utils/workflows/PHP/badge.svg?branch=master)](https://github.com/infinityloop-dev/utils/actions?query=workflow%3APHP)
 
 :hammer: Common utility classes for infinityloop packages.
 
