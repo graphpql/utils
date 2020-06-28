@@ -12,7 +12,7 @@
     },
     "tmpDir": "/tmp/infection",
     "minMsi": 90,
-    "minCoveredMsi": 93,
+    "minCoveredMsi": 92,
     "mutators": {
         "@default": true
     },
