@@ -51,7 +51,8 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         \next($this->array);
     }
 
-    public function key() : string
+    /** @return int|string|bool|object */
+    public function key()
     {
         return \key($this->array);
     }
