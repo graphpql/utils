@@ -46,7 +46,8 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValid() : void
     {
-        $check = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->isValid() && \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->isValid();
+        $check = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->isValid()
+            && \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->isValid();
 
         self::assertEquals(true, $check);
     }
@@ -68,7 +69,6 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
     {
         self::assertSame(true, \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->offsetExists('name'));
     }
-
 
     public function testOffsetGet() : void
     {
@@ -97,7 +97,6 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->serialize());
     }
 
-
     public function testUnserialize() : void
     {
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
@@ -106,22 +105,22 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertSame('{"name":"Rosta"}', $instance->toString());
     }
 
-    public function test__toString() : void
+    public function testMagicToString() : void
     {
         self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__toString());
     }
 
-    public function test__isset() : void
+    public function testMagicIsset() : void
     {
         self::assertSame(true, \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__isset('name'));
     }
 
-    public function test__get() : void
+    public function testMagicGet() : void
     {
         self::assertSame('Rosta', \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__get('name'));
     }
 
-    public function test__set() : void
+    public function testMagicSet() : void
     {
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
         $instance->__set('car', 'Tesla');
@@ -129,7 +128,7 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($instance->offsetExists('car'));
     }
 
-    public function test__unset() : void
+    public function testMagicUnset() : void
     {
         $instance = \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta']);
         $instance->__unset('name');

@@ -8,7 +8,7 @@ class BooSet extends \Infinityloop\Utils\ObjectSet
 {
     protected const INNER_CLASS = Boo::class;
 
-    protected function getKey($object)
+    protected function getKey($object) : string
     {
         return 'test';
     }

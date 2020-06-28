@@ -40,6 +40,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         return $this->array;
     }
 
+    /** @return int|string|bool|object */
     public function current()
     {
         return \current($this->array);
@@ -50,7 +51,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         \next($this->array);
     }
 
-    public function key()
+    public function key() : string
     {
         return \key($this->array);
     }
@@ -75,6 +76,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         return \array_key_exists($name, $this->array);
     }
 
+    /** @return int|string|bool|object */
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
@@ -104,6 +106,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         unset($this->array[$offset]);
     }
 
+    /** @return int|string|bool|object */
     protected function getKey($object)
     {
         return null;

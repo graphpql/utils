@@ -138,7 +138,8 @@ final class CaseConverterTest extends \PHPUnit\Framework\TestCase
             ['Abc123Ghi', ['abc', '123', 'ghi']],
             ['Abc123ghi', ['abc', '123', 'ghi']],
             ['AbcD123Ghi', ['abc', 'd', '123', 'ghi']],
-            ['-AbcD123Ghi_abc_def_ghi-abc-def123-ghi__',
+            [
+                '-AbcD123Ghi_abc_def_ghi-abc-def123-ghi__',
                 ['abc', 'd', '123', 'ghi', 'abc', 'def', 'ghi', 'abc', 'def', '123', 'ghi'],
             ],
         ];
