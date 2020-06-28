@@ -72,6 +72,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         return \array_key_exists($offset, $this->array);
     }
 
+    /** @return int|string|bool|array */
     public function offsetGet($offset)
     {
         $this->loadArray();
@@ -141,6 +142,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         return $this->offsetExists($offset);
     }
 
+    /** @return int|string|bool|array */
     public function __get($offset)
     {
         return $this->offsetGet($offset);

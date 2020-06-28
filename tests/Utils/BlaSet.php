@@ -18,7 +18,7 @@ class BlaSet extends \Infinityloop\Utils\ObjectSet
         return parent::offsetGet($offset);
     }
 
-    protected function getKey($object)
+    protected function getKey($object) : ?string
     {
         return null;
     }
