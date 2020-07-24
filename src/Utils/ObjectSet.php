@@ -93,6 +93,12 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
             throw new \Exception('Invalid offset for given object.');
         }
 
+        if ($offset === null) {
+            $this->array[] = $object;
+
+            return;
+        }
+
         $this->array[$offset] = $object;
     }
 
