@@ -111,7 +111,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         unset($this->array[$offset]);
     }
 
-    protected function getKey($object) : ?string
+    protected function getKey(object $object) : ?string
     {
         return null;
     }
