@@ -127,7 +127,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
         $instance->offsetSet(null, new \Infinityloop\Tests\Utils\Bla());
 
-        self::assertFalse($instance->offsetExists(null));
+        self::assertTrue($instance->offsetExists(0));
+        self::assertTrue($instance->offsetExists(1));
     }
 
     public function testInvalidOffsetSet() : void
