@@ -146,8 +146,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\EmptyClass(),
-            new \Infinityloop\Tests\Utils\EmptyClass()]
-        );
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            ]);
         $instance->offsetGet(3);
     }
 
@@ -169,16 +169,16 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Invalid input.');
 
         new \Infinityloop\Tests\Utils\EmptyClassSet([
-            new NamedClass('a'),
+            new \Infinityloop\Tests\Utils\NamedClass('a'),
         ]);
     }
 
     public function testOffsetSetInteger() : void
     {
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
-        $instance[] = new EmptyClass();
-        $instance[] = new EmptyClass();
-        $instance[10] = new EmptyClass();
+        $instance[] = new \Infinityloop\Tests\Utils\EmptyClass();
+        $instance[] = new \Infinityloop\Tests\Utils\EmptyClass();
+        $instance[10] = new \Infinityloop\Tests\Utils\EmptyClass();
 
         self::assertArrayHasKey(0, $instance);
         self::assertArrayHasKey(1, $instance);
@@ -191,15 +191,15 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Invalid offset for given object.');
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
-        $instance['abc'] = new EmptyClass();
+        $instance['abc'] = new \Infinityloop\Tests\Utils\EmptyClass();
     }
 
     public function testOffsetSetNamed() : void
     {
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new NamedClass('a');
-        $instance['b'] = new NamedClass('b');
-        $instance[] = new NamedClass('c');
+        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('a');
+        $instance['b'] = new \Infinityloop\Tests\Utils\NamedClass('b');
+        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('c');
 
         self::assertArrayHasKey('a', $instance);
         self::assertArrayHasKey('b', $instance);
@@ -212,7 +212,7 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Invalid offset for given object.');
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[123] = new NamedClass('123');
+        $instance[123] = new \Infinityloop\Tests\Utils\NamedClass('123');
     }
 
     public function testInvalidOffsetSetNamedNameMismatch() : void
@@ -221,14 +221,14 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Invalid offset for given object.');
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance['a'] = new NamedClass('b');
+        $instance['a'] = new \Infinityloop\Tests\Utils\NamedClass('b');
     }
 
     public function testOffsetSetNamedExplicitReplace() : void
     {
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new NamedClass('b');
-        $instance['b'] = new NamedClass('b');
+        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
+        $instance['b'] = new \Infinityloop\Tests\Utils\NamedClass('b');
 
         self::assertCount(1, $instance);
         self::assertArrayHasKey('b', $instance);
@@ -240,8 +240,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Duplicated item. Set using explicit key if you wish to replace.');
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new NamedClass('b');
-        $instance[] = new NamedClass('b');
+        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
+        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
     }
 
     public function testOffsetUnset() : void
