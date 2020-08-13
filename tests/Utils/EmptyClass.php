@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Tests\Utils;
 
-class Boo
+final class EmptyClass
 {
 }

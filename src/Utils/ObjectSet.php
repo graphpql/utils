@@ -24,7 +24,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         return $this->array;
     }
 
-    public function merge(self $objectSet) : self
+    public function merge(self $objectSet, bool $allowReplace = false) : self
     {
         if (!$objectSet instanceof static) {
             throw new \Exception('I can only merge ObjectSets of same type');
@@ -104,9 +104,11 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
             }
 
             $this->array[$key] = $object;
+
+            return;
         }
 
-        if (($key === null && \is_int($offset)) || (\is_string($key) && \is_string($offset))) {
+        if (($key === null && \is_int($offset)) || (\is_string($key) && \is_string($offset) && $key === $offset)) {
             $this->array[$offset] = $object;
 
             return;

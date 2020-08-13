@@ -8,178 +8,328 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 {
     public function testInvalidArgument() : void
     {
-        self::expectException('Exception');
-        self::expectExceptionMessage('Invalid input.');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid input.');
 
-        $data = ['bla' ,new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        new \Infinityloop\Tests\Utils\BlaSet($data);
+        $data = ['bla', new \Infinityloop\Tests\Utils\EmptyClass(), new \Infinityloop\Tests\Utils\EmptyClass()];
+        new \Infinityloop\Tests\Utils\EmptyClassSet($data);
     }
 
     public function testDuplicatedItem() : void
     {
-        self::expectException('Exception');
-        self::expectExceptionMessage('Duplicated item.');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Duplicated item. Set using explicit key if you wish to replace.');
 
-        $data = [new \Infinityloop\Tests\Utils\Boo(),'test' => new \Infinityloop\Tests\Utils\Boo(), new \Infinityloop\Tests\Utils\Boo()];
-        new \Infinityloop\Tests\Utils\BooSet($data);
+        new \Infinityloop\Tests\Utils\NamedClassSet([
+            new \Infinityloop\Tests\Utils\NamedClass('duplicatedKey'),
+            new \Infinityloop\Tests\Utils\NamedClass('duplicatedKey'),
+        ]);
     }
 
     public function testToArray() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $array = (new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]))->toArray();
 
-        self::assertEquals([0 => new \Infinityloop\Tests\Utils\Bla(), 1 => new \Infinityloop\Tests\Utils\Bla()], $instance->toArray());
+        self::assertCount(2, $array);
+        self::assertArrayHasKey(0, $array);
+        self::assertArrayHasKey(1, $array);
     }
 
-    public function testCurrent() : void
+    public function testIterator() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
 
-        self::assertEquals(new \Infinityloop\Tests\Utils\Bla(), $instance->current());
-    }
+        $index = 0;
 
-    public function testNext() : void
-    {
-        $data = [new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-        $instance->next();
+        foreach ($instance as $key => $value) {
+            self::assertSame($index, $key);
+            self::assertInstanceOf(EmptyClass::class, $value);
 
-        self::assertSame(false, $instance->valid());
-    }
+            ++$index;
+        }
 
-    public function testKey() : void
-    {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $index = 0;
 
-        self::assertArrayHasKey(0, $instance->toArray());
-        self::assertSame(0, $instance->key());
-        self::assertNotNull($instance->key());
-    }
+        foreach ($instance as $key => $value) {
+            self::assertSame($index, $key);
+            self::assertInstanceOf(EmptyClass::class, $value);
 
-    public function testValid() : void
-    {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-
-        self::assertSame(true, $instance->valid());
-    }
-
-    public function testRewind() : void
-    {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-        $instance->next();
-        $instance->rewind();
-
-        self::assertSame(0, $instance->key());
+            ++$index;
+        }
     }
 
     public function testCount() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
 
         self::assertSame(3, $instance->count());
     }
 
-    public function testOffsetExists() : void
+    public function testOffsetExistsInteger() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
 
-        self::assertSame(true, $instance->offsetExists(1));
+        self::assertTrue($instance->offsetExists(0));
+        self::assertTrue(isset($instance[0]));
+        self::assertTrue($instance->offsetExists(1));
+        self::assertTrue(isset($instance[1]));
+        self::assertTrue($instance->offsetExists(2));
+        self::assertTrue(isset($instance[2]));
+        self::assertFalse($instance->offsetExists(3));
+        self::assertFalse(isset($instance[3]));
     }
 
-    public function testOffsetGet() : void
+    public function testOffsetExistsNamed() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
+            new \Infinityloop\Tests\Utils\NamedClass('a'),
+            new \Infinityloop\Tests\Utils\NamedClass('b'),
+            new \Infinityloop\Tests\Utils\NamedClass('c'),
+        ]);
 
-        self::assertEquals(new \Infinityloop\Tests\Utils\Bla(), $instance->offsetGet(1));
+        self::assertTrue($instance->offsetExists('a'));
+        self::assertTrue(isset($instance['a']));
+        self::assertTrue($instance->offsetExists('b'));
+        self::assertTrue(isset($instance['b']));
+        self::assertTrue($instance->offsetExists('c'));
+        self::assertTrue(isset($instance['c']));
+        self::assertFalse($instance->offsetExists('d'));
+        self::assertFalse(isset($instance['d']));
     }
 
-    public function testInvalidOffsetGet() : void
+    public function testOffsetGetInteger() : void
     {
-        self::expectException('Exception');
-        self::expectExceptionMessage('Item doesnt exist.');
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
 
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        self::assertInstanceOf(EmptyClass::class, $instance[0]);
+        self::assertInstanceOf(EmptyClass::class, $instance[1]);
+        self::assertInstanceOf(EmptyClass::class, $instance[2]);
+    }
+
+    public function testOffsetGetNamed() : void
+    {
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
+            new \Infinityloop\Tests\Utils\NamedClass('a'),
+            new \Infinityloop\Tests\Utils\NamedClass('b'),
+            new \Infinityloop\Tests\Utils\NamedClass('c'),
+        ]);
+
+        self::assertInstanceOf(NamedClass::class, $instance['a']);
+        self::assertInstanceOf(NamedClass::class, $instance['b']);
+        self::assertInstanceOf(NamedClass::class, $instance['c']);
+    }
+
+    public function testInvalidOffsetGetInteger() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Item doesnt exist.');
+
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass()]
+        );
         $instance->offsetGet(3);
     }
 
-    public function testOffsetSet() : void
+    public function testInvalidOffsetGetNamed() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-        $instance->offsetSet(5, new \Infinityloop\Tests\Utils\Bla());
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Item doesnt exist.');
 
-        self::assertTrue($instance->offsetExists(5));
-        self::assertEquals(new \Infinityloop\Tests\Utils\Bla(), $instance->offsetGet(5));
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
+            new \Infinityloop\Tests\Utils\NamedClass('a'),
+            new \Infinityloop\Tests\Utils\NamedClass('b'),
+        ]);
+        $instance->offsetGet('c');
     }
 
-    public function testOffsetSetReturn() : void
+    public function testInvalidClass() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-        $instance->offsetSet(null, new \Infinityloop\Tests\Utils\Bla());
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid input.');
 
-        self::assertTrue($instance->offsetExists(0));
-        self::assertTrue($instance->offsetExists(1));
+        new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new NamedClass('a'),
+        ]);
     }
 
-    public function testInvalidOffsetSet() : void
+    public function testOffsetSetInteger() : void
     {
-        self::expectException('Exception');
-        self::expectExceptionMessage('Invalid offset for given object.');
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
+        $instance[] = new EmptyClass();
+        $instance[] = new EmptyClass();
+        $instance[10] = new EmptyClass();
 
-        $instance = new class ([]) extends \Infinityloop\Utils\ObjectSet
-        {
-            protected function getKey($object) : string
-            {
-                return 'test';
-            }
-        };
-        $anonymousClass = new class ()
-        {
-        };
-        $instance->offsetSet('', $anonymousClass);
+        self::assertArrayHasKey(0, $instance);
+        self::assertArrayHasKey(1, $instance);
+        self::assertArrayHasKey(10, $instance);
+    }
+
+    public function testInvalidOffsetSetInteger() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid offset for given object.');
+
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
+        $instance['abc'] = new EmptyClass();
+    }
+
+    public function testOffsetSetNamed() : void
+    {
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+        $instance[] = new NamedClass('a');
+        $instance['b'] = new NamedClass('b');
+        $instance[] = new NamedClass('c');
+
+        self::assertArrayHasKey('a', $instance);
+        self::assertArrayHasKey('b', $instance);
+        self::assertArrayHasKey('c', $instance);
+    }
+
+    public function testInvalidOffsetSetNamedTypeMismatch() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid offset for given object.');
+
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+        $instance[123] = new NamedClass('123');
+    }
+
+    public function testInvalidOffsetSetNamedNameMismatch() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid offset for given object.');
+
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+        $instance['a'] = new NamedClass('b');
+    }
+
+    public function testOffsetSetNamedExplicitReplace() : void
+    {
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+        $instance[] = new NamedClass('b');
+        $instance['b'] = new NamedClass('b');
+
+        self::assertCount(1, $instance);
+        self::assertArrayHasKey('b', $instance);
+    }
+
+    public function testInvalidOffsetSetNamedExplicitReplace() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Duplicated item. Set using explicit key if you wish to replace.');
+
+        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+        $instance[] = new NamedClass('b');
+        $instance[] = new NamedClass('b');
     }
 
     public function testOffsetUnset() : void
     {
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
+
+        self::assertCount(3, $instance);
+        self::assertArrayHasKey(0, $instance);
+        self::assertArrayHasKey(1, $instance);
+        self::assertArrayHasKey(2, $instance);
+
         $instance->offsetUnset(1);
 
-        self::assertSame(false, $instance->offsetExists(1));
+        self::assertCount(2, $instance);
+        self::assertArrayNotHasKey(1, $instance);
+
+        $instance->offsetUnset(2);
+
+        self::assertCount(1, $instance);
+        self::assertArrayNotHasKey(2, $instance);
+
+        $instance->offsetUnset(0);
+
+        self::assertCount(0, $instance);
+        self::assertArrayNotHasKey(0, $instance);
     }
 
     public function testInvalidOffsetUnset() : void
     {
-        self::expectException('Exception');
-        self::expectExceptionMessage('Item already doesnt exist.');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Item already doesnt exist.');
 
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        $instance = new \Infinityloop\Tests\Utils\BlaSet($data);
-        $instance->offsetUnset('c');
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
+        $instance->offsetUnset(0);
     }
 
-    public function testGetKey() : void
+    public function testMerge() : void
     {
-        $reflection = new \ReflectionClass(\Infinityloop\Utils\ObjectSet::class);
-        $method = $reflection->getMethod('getKey');
-        $method->setAccessible(true);
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
 
-        $data = [new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla(), new \Infinityloop\Tests\Utils\Bla()];
-        self::assertNull($method->invokeArgs(new \Infinityloop\Tests\Utils\BlaSet($data), [new \Infinityloop\Tests\Utils\Bla()]));
+        $secondInstance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
+
+        $instance->merge($secondInstance);
+
+        self::assertCount(6, $instance);
+        self::assertCount(3, $secondInstance);
     }
 
-    public function testGetKeyVisibility() : void
+    public function testMergeReplace() : void
     {
-        self::assertTrue((new \ReflectionClass(\Infinityloop\Utils\ObjectSet::class))->getMethod('getKey')->isProtected());
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
+
+        $secondInstance = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+            new \Infinityloop\Tests\Utils\EmptyClass(),
+        ]);
+
+        $instance->merge($secondInstance, true);
+
+        self::assertCount(3, $instance);
+        self::assertCount(3, $secondInstance);
+    }
+
+    public function testMergeInvalid() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('I can only merge ObjectSets of same type');
+
+        $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
+        $secondInstance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
+
+        $instance->merge($secondInstance);
     }
 }
