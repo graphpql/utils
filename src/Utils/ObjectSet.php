@@ -106,13 +106,7 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
             $this->array[$key] = $object;
         }
 
-        if ($key === null && \is_int($offset)) {
-            $this->array[] = $object;
-
-            return;
-        }
-
-        if (\is_string($key) && \is_string($offset)) {
+        if (($key === null && \is_int($offset)) || (\is_string($key) && \is_string($offset))) {
             $this->array[$offset] = $object;
 
             return;
