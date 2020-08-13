@@ -15,29 +15,28 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
     public function __construct(array $data)
     {
         foreach ($data as $object) {
-            if (!\is_a($object, static::INNER_CLASS)) {
-                throw new \Exception('Invalid input.');
-            }
-
-            $key = $this->getKey($object);
-
-            if ($key === null) {
-                $this->array[] = $object;
-
-                continue;
-            }
-
-            if ($this->offsetExists($key)) {
-                throw new \Exception('Duplicated item.');
-            }
-
-            $this->array[$key] = $object;
+            $this->offsetSet(null, $object);
         }
     }
 
     public function toArray() : array
     {
         return $this->array;
+    }
+
+    public function merge(self $objectSet) : self
+    {
+        if (!$objectSet instanceof static) {
+            throw new \Exception('I can only merge ObjectSets of same type');
+        }
+
+        foreach ($objectSet as $offset => $object) {
+            $this->offsetSet($allowReplace
+                ? $offset
+                : null, $object);
+        }
+
+        return $this;
     }
 
     public function current() : object
@@ -71,9 +70,9 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
         return \count($this->array);
     }
 
-    public function offsetExists($name) : bool
+    public function offsetExists($offset) : bool
     {
-        return \array_key_exists($name, $this->array);
+        return \array_key_exists($offset, $this->array);
     }
 
     public function offsetGet($offset) : object
@@ -87,19 +86,39 @@ abstract class ObjectSet implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $object) : void
     {
-        $key = $this->getKey($object);
-
-        if ($key !== null && $key !== $offset) {
-            throw new \Exception('Invalid offset for given object.');
+        if (!\is_a($object, static::INNER_CLASS)) {
+            throw new \Exception('Invalid input.');
         }
 
+        $key = $this->getKey($object);
+
         if ($offset === null) {
+            if ($key === null) {
+                $this->array[] = $object;
+
+                return;
+            }
+
+            if ($this->offsetExists($key)) {
+                throw new \Exception('Duplicated item. Set using explicit key if you wish to replace.');
+            }
+
+            $this->array[$key] = $object;
+        }
+
+        if ($key === null && \is_int($offset)) {
             $this->array[] = $object;
 
             return;
         }
 
-        $this->array[$offset] = $object;
+        if (\is_string($key) && \is_string($offset)) {
+            $this->array[$offset] = $object;
+
+            return;
+        }
+
+        throw new \Exception('Invalid offset for given object.');
     }
 
     public function offsetUnset($offset) : void
