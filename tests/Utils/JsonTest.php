@@ -11,12 +11,14 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
+        self::assertSame(['name' => 'Rosta'], $instance->toArray());
     }
 
     public function testFromArray() : void
     {
         $instance = \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta']);
 
+        self::assertSame('{"name":"Rosta"}', $instance->toString());
         self::assertSame(['name' => 'Rosta'], $instance->toArray());
     }
 
@@ -27,21 +29,11 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($instance->isValid());
     }
 
-    public function testToString() : void
-    {
-        self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->toString());
-    }
-
     public function testLoadStringInvalidInput() : void
     {
         $instance = \Infinityloop\Utils\Json::fromArray(['name' => " \xB1\x31"]);
 
         self::assertFalse($instance->isValid());
-    }
-
-    public function testToArray() : void
-    {
-        self::assertSame(['name' => 'Rosta'], \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->toArray());
     }
 
     public function testIsValid() : void

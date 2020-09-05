@@ -11,29 +11,22 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
     private ?string $string;
     private ?array $array;
     private bool $valid;
-    private bool $assoc = false;
 
-    private function __construct(?string $json, ?array $data, bool $assoc = false)
+    private function __construct(?string $json, ?array $data)
     {
         $this->string = $json;
         $this->array = $data;
-        $this->assoc = $assoc;
         $this->valid = false;
     }
 
-    public static function fromString(string $json, bool $assoc = true) : self
+    public static function fromString(string $json) : self
     {
-        return new static($json, null, $assoc);
+        return new static($json, null);
     }
 
     public static function fromArray(array $data) : self
     {
-        return new static(null, $data, false);
-    }
-
-    public function isInAssocMode() : bool
-    {
-        return $this->assoc;
+        return new static(null, $data);
     }
 
     public function toString() : string
@@ -79,7 +72,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         return \array_key_exists($offset, $this->array);
     }
 
-    /** @return int|string|bool|array|\stdClass */
+    /** @return int|string|bool|array */
     public function offsetGet($offset)
     {
         $this->loadArray();
@@ -132,7 +125,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         }
 
         try {
-            $this->array = \json_decode($this->string, $this->assoc, 512, \JSON_THROW_ON_ERROR);
+            $this->array = \json_decode($this->string, true, 512, \JSON_THROW_ON_ERROR);
             $this->valid = true;
         } catch (\JsonException $exception) {
             $this->valid = false;
@@ -149,7 +142,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         return $this->offsetExists($offset);
     }
 
-    /** @return int|string|bool|array|\stdClass */
+    /** @return int|string|bool|array */
     public function __get($offset)
     {
         return $this->offsetGet($offset);
