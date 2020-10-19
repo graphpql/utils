@@ -8,6 +8,8 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
 {
     use \Nette\SmartObject;
 
+    private const FLAGS = \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
+
     private ?string $string;
     private ?array $array;
     private bool $valid;
@@ -111,7 +113,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         }
 
         try {
-            $this->string = \json_encode($this->array, \JSON_THROW_ON_ERROR);
+            $this->string = \json_encode($this->array, self::FLAGS);
             $this->valid = true;
         } catch (\JsonException $exception) {
             $this->valid = false;
@@ -125,7 +127,7 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         }
 
         try {
-            $this->array = \json_decode($this->string, true, 512, \JSON_THROW_ON_ERROR);
+            $this->array = \json_decode($this->string, true, 512, self::FLAGS);
             $this->valid = true;
         } catch (\JsonException $exception) {
             $this->valid = false;
