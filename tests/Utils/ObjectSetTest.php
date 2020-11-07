@@ -6,26 +6,6 @@ namespace Infinityloop\Tests\Utils;
 
 final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 {
-    public function testInvalidArgument() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid input.');
-
-        $data = ['bla', new \Infinityloop\Tests\Utils\EmptyClass(), new \Infinityloop\Tests\Utils\EmptyClass()];
-        new \Infinityloop\Tests\Utils\EmptyClassSet($data);
-    }
-
-    public function testDuplicatedItem() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Duplicated item. Set using explicit key if you wish to replace.');
-
-        new \Infinityloop\Tests\Utils\NamedClassSet([
-            new \Infinityloop\Tests\Utils\NamedClass('duplicatedKey'),
-            new \Infinityloop\Tests\Utils\NamedClass('duplicatedKey'),
-        ]);
-    }
-
     public function testToArray() : void
     {
         $array = (new \Infinityloop\Tests\Utils\EmptyClassSet([
@@ -77,7 +57,7 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         self::assertSame(3, $instance->count());
     }
 
-    public function testOffsetExistsInteger() : void
+    public function testOffsetExists() : void
     {
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\EmptyClass(),
@@ -95,25 +75,7 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         self::assertFalse(isset($instance[3]));
     }
 
-    public function testOffsetExistsNamed() : void
-    {
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
-            new \Infinityloop\Tests\Utils\NamedClass('a'),
-            new \Infinityloop\Tests\Utils\NamedClass('b'),
-            new \Infinityloop\Tests\Utils\NamedClass('c'),
-        ]);
-
-        self::assertTrue($instance->offsetExists('a'));
-        self::assertTrue(isset($instance['a']));
-        self::assertTrue($instance->offsetExists('b'));
-        self::assertTrue(isset($instance['b']));
-        self::assertTrue($instance->offsetExists('c'));
-        self::assertTrue(isset($instance['c']));
-        self::assertFalse($instance->offsetExists('d'));
-        self::assertFalse(isset($instance['d']));
-    }
-
-    public function testOffsetGetInteger() : void
+    public function testOffsetGet() : void
     {
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\EmptyClass(),
@@ -126,20 +88,7 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         self::assertInstanceOf(EmptyClass::class, $instance[2]);
     }
 
-    public function testOffsetGetNamed() : void
-    {
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
-            new \Infinityloop\Tests\Utils\NamedClass('a'),
-            new \Infinityloop\Tests\Utils\NamedClass('b'),
-            new \Infinityloop\Tests\Utils\NamedClass('c'),
-        ]);
-
-        self::assertInstanceOf(NamedClass::class, $instance['a']);
-        self::assertInstanceOf(NamedClass::class, $instance['b']);
-        self::assertInstanceOf(NamedClass::class, $instance['c']);
-    }
-
-    public function testInvalidOffsetGetInteger() : void
+    public function testInvalidOffsetGet() : void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Item doesnt exist.');
@@ -147,33 +96,11 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\EmptyClass(),
             new \Infinityloop\Tests\Utils\EmptyClass(),
-            ]);
+        ]);
         $instance->offsetGet(3);
     }
 
-    public function testInvalidOffsetGetNamed() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Item doesnt exist.');
-
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
-            new \Infinityloop\Tests\Utils\NamedClass('a'),
-            new \Infinityloop\Tests\Utils\NamedClass('b'),
-        ]);
-        $instance->offsetGet('c');
-    }
-
-    public function testInvalidClass() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid input.');
-
-        new \Infinityloop\Tests\Utils\EmptyClassSet([
-            new \Infinityloop\Tests\Utils\NamedClass('a'),
-        ]);
-    }
-
-    public function testOffsetSetInteger() : void
+    public function testOffsetSet() : void
     {
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $instance[] = new \Infinityloop\Tests\Utils\EmptyClass();
@@ -185,63 +112,13 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         self::assertArrayHasKey(10, $instance);
     }
 
-    public function testInvalidOffsetSetInteger() : void
+    public function testInvalidOffsetSet() : void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Invalid offset for given object.');
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $instance['abc'] = new \Infinityloop\Tests\Utils\EmptyClass();
-    }
-
-    public function testOffsetSetNamed() : void
-    {
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('a');
-        $instance['b'] = new \Infinityloop\Tests\Utils\NamedClass('b');
-        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('c');
-
-        self::assertArrayHasKey('a', $instance);
-        self::assertArrayHasKey('b', $instance);
-        self::assertArrayHasKey('c', $instance);
-    }
-
-    public function testInvalidOffsetSetNamedTypeMismatch() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid offset for given object.');
-
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[123] = new \Infinityloop\Tests\Utils\NamedClass('123');
-    }
-
-    public function testInvalidOffsetSetNamedNameMismatch() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid offset for given object.');
-
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance['a'] = new \Infinityloop\Tests\Utils\NamedClass('b');
-    }
-
-    public function testOffsetSetNamedExplicitReplace() : void
-    {
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
-        $instance['b'] = new \Infinityloop\Tests\Utils\NamedClass('b');
-
-        self::assertCount(1, $instance);
-        self::assertArrayHasKey('b', $instance);
-    }
-
-    public function testInvalidOffsetSetNamedExplicitReplace() : void
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Duplicated item. Set using explicit key if you wish to replace.');
-
-        $instance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
-        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
-        $instance[] = new \Infinityloop\Tests\Utils\NamedClass('b');
     }
 
     public function testOffsetUnset() : void
@@ -325,11 +202,31 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
     public function testMergeInvalid() : void
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessage('I can only merge ObjectSets of same type');
+        $this->expectExceptionMessage('I can only merge Sets of same type');
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $secondInstance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
 
         $instance->merge($secondInstance);
+    }
+
+    public function testInvalidInput() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid input.');
+
+        new \Infinityloop\Tests\Utils\EmptyClassSet([
+            new \Infinityloop\Tests\Utils\NamedClass('a'),
+        ]);
+    }
+
+    public function testInvalidInputScalar() : void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid input.');
+
+        new \Infinityloop\Tests\Utils\EmptyClassSet([
+            'bla',
+        ]);
     }
 }
