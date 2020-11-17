@@ -36,10 +36,10 @@ final class ImplicitObjectMapTest extends \PHPUnit\Framework\TestCase
 
     public function testInitializationWithoutKeysDuplicated() : void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Duplicated item');
+        $this->expectException(\Infinityloop\Utils\Exception\DuplicateItemError::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\DuplicateItemError::MESSAGE);
 
-        $instance = new \Infinityloop\Tests\Utils\ImplicitNamedClassSet([
+        new \Infinityloop\Tests\Utils\ImplicitNamedClassSet([
             new \Infinityloop\Tests\Utils\NamedClass('a'),
             new \Infinityloop\Tests\Utils\NamedClass('a'),
         ]);
@@ -47,10 +47,10 @@ final class ImplicitObjectMapTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetSet() : void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Offset does not match implicit offset');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidImplicitObjectOffsetSetImpl::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidImplicitObjectOffsetSetImpl::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\ImplicitNamedClassSet();
-        $instance[1] = new NamedClass('a');
+        $instance[1] = new \Infinityloop\Tests\Utils\NamedClass('a');
     }
 }

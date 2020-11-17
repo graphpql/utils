@@ -15,7 +15,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function merge(self $objectSet, bool $allowReplace = false) : self
     {
         if (!$objectSet instanceof static) {
-            throw new \Exception('I can only merge Sets of same type');
+            throw new \Infinityloop\Utils\Exception\SetsTypeMergeError();
         }
 
         return $this->mergeImpl($objectSet, $allowReplace);
@@ -59,7 +59,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function offsetGet($offset) : object
     {
         if (!$this->offsetExists($offset)) {
-            throw new \Exception('Item doesnt exist.');
+            throw new \Infinityloop\Utils\Exception\InvalidOffsetGet();
         }
 
         return $this->array[$offset];
@@ -68,7 +68,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function offsetSet($offset, $object) : void
     {
         if (!\is_a($object, static::INNER_CLASS)) {
-            throw new \Exception('Invalid input.');
+            throw new \Infinityloop\Utils\Exception\InvalidOffsetSet();
         }
 
         $this->offsetSetImpl($offset, $object);
@@ -77,7 +77,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function offsetUnset($offset) : void
     {
         if (!$this->offsetExists($offset)) {
-            throw new \Exception('Item already doesnt exist.');
+            throw new \Infinityloop\Utils\Exception\InvalidOffsetUnset();
         }
 
         unset($this->array[$offset]);
