@@ -31,7 +31,7 @@ abstract class ImplicitObjectMap extends \Infinityloop\Utils\ObjectMap
 
         if ($offset === null) {
             if ($this->offsetExists($key)) {
-                throw new \Infinityloop\Utils\Exception\DuplicateItemError();
+                throw new \Infinityloop\Utils\Exception\DuplicateItem();
             }
 
             parent::offsetSetImpl($key, $object);
@@ -39,6 +39,6 @@ abstract class ImplicitObjectMap extends \Infinityloop\Utils\ObjectMap
             return;
         }
 
-        throw new \Infinityloop\Utils\Exception\InvalidImplicitObjectOffsetSetImpl();
+        throw new \Infinityloop\Utils\Exception\ImplicitOffsetNotMatch();
     }
 }

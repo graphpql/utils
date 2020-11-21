@@ -22,7 +22,7 @@ abstract class ObjectMap extends \Infinityloop\Utils\BaseSet
     {
         foreach ($objectSet as $offset => $object) {
             if (!$allowReplace && $this->offsetExists($offset)) {
-                throw new \Infinityloop\Utils\Exception\MergeImplicitDuplicateItemError();
+                throw new \Infinityloop\Utils\Exception\ItemAlreadyExists();
             }
 
             $this->offsetSet($offset, $object);
@@ -39,6 +39,6 @@ abstract class ObjectMap extends \Infinityloop\Utils\BaseSet
             return;
         }
 
-        throw new \Infinityloop\Utils\Exception\InvalidObjectOffsetSetImpl();
+        throw new \Infinityloop\Utils\Exception\InvalidObjectOffset();
     }
 }
