@@ -152,8 +152,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetUnset() : void
     {
-        $this->expectException(\Infinityloop\Utils\Exception\ItemDoesntExist::class);
-        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\ItemDoesntExist::MESSAGE);
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidItem::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidItem::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $instance->offsetUnset(0);

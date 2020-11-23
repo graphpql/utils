@@ -77,7 +77,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function offsetUnset($offset) : void
     {
         if (!$this->offsetExists($offset)) {
-            throw new \Infinityloop\Utils\Exception\ItemDoesntExist();
+            throw new \Infinityloop\Utils\Exception\InvalidItem();
         }
 
         unset($this->array[$offset]);
