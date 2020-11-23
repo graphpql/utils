@@ -131,7 +131,7 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
 
     public function testDirectMapJson() : void
     {
-        $instance = \Infinityloop\Utils\Json\SequentialJson::fromString('{"name":"Rosta"}');
+        $instance = \Infinityloop\Utils\Json\MapJson::fromString('{"name":"Rosta"}');
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
         self::assertInstanceOf(\stdClass::class, $instance);

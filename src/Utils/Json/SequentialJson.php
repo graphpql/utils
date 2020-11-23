@@ -11,7 +11,7 @@ final class SequentialJson extends \Infinityloop\Utils\Json\JsonContract
 
     private function __construct(?string $json, ?array $data)
     {
-        if (\array_key_first($data) !== 0) {
+        if (\is_array($data) && \array_key_first($data) !== 0) {
             throw new \RuntimeException('Associative array detected, use MapJson instead.');
         }
 
