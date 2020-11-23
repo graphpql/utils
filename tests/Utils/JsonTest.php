@@ -11,37 +11,15 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
-        self::assertSame(['name' => 'Rosta'], $instance->toArray());
+        self::assertSame(['name' => 'Rosta'], (array) $instance->toNative());
     }
 
-    public function testFromArray() : void
+    public function testFromStdClass() : void
     {
-        $instance = \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta']);
+        $instance = \Infinityloop\Utils\Json::fromNative((object) ['name' => 'Rosta']);
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
-        self::assertSame(['name' => 'Rosta'], $instance->toArray());
-    }
-
-    public function testLoadArrayInvalidInput() : void
-    {
-        $instance = \Infinityloop\Utils\Json::fromString('{name: Rosta}');
-
-        self::assertFalse($instance->isValid());
-    }
-
-    public function testLoadStringInvalidInput() : void
-    {
-        $instance = \Infinityloop\Utils\Json::fromArray(['name' => " \xB1\x31"]);
-
-        self::assertFalse($instance->isValid());
-    }
-
-    public function testIsValid() : void
-    {
-        $check = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->isValid()
-            && \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->isValid();
-
-        self::assertEquals(true, $check);
+        self::assertSame(['name' => 'Rosta'], (array) $instance->toNative());
     }
 
     public function testCount() : void
@@ -49,22 +27,28 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
 
         self::assertSame(1, $instance->count());
-        self::assertCount($instance->count(), $instance->toArray());
     }
 
     public function testGetIterator() : void
     {
-        self::assertInstanceOf('\ArrayIterator', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->getIterator());
+        self::assertInstanceOf(
+            \ArrayIterator::class,
+            \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->getIterator(),
+        );
     }
 
     public function testOffsetExists() : void
     {
-        self::assertSame(true, \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->offsetExists('name'));
+        self::assertTrue(\Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->offsetExists('name'));
+        self::assertArrayHasKey('name', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}'));
+        self::assertTrue(isset(\Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->name));
     }
 
     public function testOffsetGet() : void
     {
         self::assertSame('Rosta', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->offsetGet('name'));
+        self::assertSame('Rosta', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')['name']);
+        self::assertSame('Rosta', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->name);
     }
 
     public function testOffsetSet() : void
@@ -72,16 +56,29 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
         $instance->offsetSet('car', 'Tesla');
 
-        self::assertSame('{"name":"Rosta","car":"Tesla"}', $instance->toString());
         self::assertTrue($instance->offsetExists('car'));
+        self::assertSame('{"name":"Rosta","car":"Tesla"}', $instance->toString());
+
+        $instance->car = 'Mercedes';
+
+        self::assertTrue($instance->offsetExists('car'));
+        self::assertSame('{"name":"Rosta","car":"Mercedes"}', $instance->toString());
     }
 
     public function testOffsetUnset() : void
     {
         $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
+
+        self::assertTrue($instance->offsetExists('name'));
+
         $instance->offsetUnset('name');
 
-        self::assertSame(false, $instance->offsetExists('name'));
+        self::assertFalse($instance->offsetExists('name'));
+    }
+
+    public function testMagicToString() : void
+    {
+        self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->__toString());
     }
 
     public function testSerialize() : void
@@ -95,36 +92,5 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance->unserialize('{"name":"Rosta"}');
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
-    }
-
-    public function testMagicToString() : void
-    {
-        self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__toString());
-    }
-
-    public function testMagicIsset() : void
-    {
-        self::assertSame(true, \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__isset('name'));
-    }
-
-    public function testMagicGet() : void
-    {
-        self::assertSame('Rosta', \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta'])->__get('name'));
-    }
-
-    public function testMagicSet() : void
-    {
-        $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
-        $instance->__set('car', 'Tesla');
-
-        self::assertTrue($instance->offsetExists('car'));
-    }
-
-    public function testMagicUnset() : void
-    {
-        $instance = \Infinityloop\Utils\Json::fromArray(['name' => 'Rosta']);
-        $instance->__unset('name');
-
-        self::assertSame(false, $instance->offsetExists('name'));
     }
 }

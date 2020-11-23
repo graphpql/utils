@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Infinityloop\Utils\Json;
+
+abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable, \Stringable
+{
+    use \Nette\SmartObject;
+
+    protected const FLAGS =
+        \JSON_THROW_ON_ERROR |
+        \JSON_UNESCAPED_UNICODE |
+        \JSON_UNESCAPED_SLASHES |
+        \JSON_PRESERVE_ZERO_FRACTION;
+
+    abstract public static function fromString(string $json) : self;
+
+    abstract public function toString() : string;
+
+    abstract public function toNative() : array|\stdClass;
+
+    public function serialize() : string
+    {
+        return $this->toString();
+    }
+
+    public function unserialize($serialized) : \Infinityloop\Utils\Json
+    {
+        return \Infinityloop\Utils\Json::fromString($serialized);
+    }
+
+    public function __toString() : string
+    {
+        return $this->toString();
+    }
+
+    public function __isset($name) : bool
+    {
+        return $this->offsetExists($name);
+    }
+
+    public function __get($name) : int|string|float|bool|array|\stdClass|null
+    {
+        return $this->offsetGet($name);
+    }
+
+    public function __set($name, $value) : void
+    {
+        $this->offsetSet($name, $value);
+    }
+
+    public function __unset($name) : void
+    {
+        $this->offsetUnset($name);
+    }
+}

@@ -4,31 +4,29 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Utils;
 
-final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable
+final class Json extends \Infinityloop\Utils\Json\JsonContract
 {
-    use \Nette\SmartObject;
-
-    private const FLAGS = \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION;
-
     private ?string $string;
-    private ?array $array;
-    private bool $valid;
+    private ?\Infinityloop\Utils\Json\JsonContract $inner;
 
-    private function __construct(?string $json, ?array $data)
+    private function __construct(?string $json, ?\Infinityloop\Utils\Json\JsonContract $data)
     {
         $this->string = $json;
-        $this->array = $data;
-        $this->valid = false;
+        $this->inner = $data;
     }
 
     public static function fromString(string $json) : self
     {
-        return new static($json, null);
+        return new self($json, null);
     }
 
-    public static function fromArray(array $data) : self
+    public static function fromNative(array|\stdClass $data) : self
     {
-        return new static(null, $data);
+        if (\is_array($data)) {
+            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));
+        }
+
+        return new self(null, \Infinityloop\Utils\Json\MapJson::fromNative($data));
     }
 
     public function toString() : string
@@ -38,72 +36,53 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
         return $this->string;
     }
 
-    public function toArray() : array
+    public function toNative() : array|\stdClass
     {
-        $this->loadArray();
+        $this->loadInner();
 
-        return $this->array;
-    }
-
-    public function isValid() : bool
-    {
-        $this->loadString();
-        $this->loadArray();
-
-        return $this->valid;
+        return $this->inner->toNative();
     }
 
     public function count() : int
     {
-        $this->loadArray();
+        $this->loadInner();
 
-        return \count($this->array);
+        return $this->inner->count();
     }
 
-    public function getIterator() : \Iterator
+    public function getIterator() : \Traversable
     {
-        $this->loadArray();
+        $this->loadInner();
 
-        return new \ArrayIterator($this->array);
+        return $this->inner->getIterator();
     }
 
     public function offsetExists($offset) : bool
     {
-        $this->loadArray();
+        $this->loadInner();
 
-        return \array_key_exists($offset, $this->array);
+        return $this->inner->offsetExists($offset);
     }
 
-    /** @return int|string|bool|array */
-    public function offsetGet($offset)
+    public function offsetGet($offset) : int|string|float|bool|array|\stdClass|null
     {
-        $this->loadArray();
+        $this->loadInner();
 
-        return $this->array[$offset];
+        return $this->inner->offsetGet($offset);
     }
 
     public function offsetSet($offset, $value) : void
     {
-        $this->loadArray();
-        $this->array[$offset] = $value;
+        $this->loadInner();
+        $this->inner->offsetSet($offset, $value);
         $this->string = null;
     }
 
     public function offsetUnset($offset) : void
     {
-        $this->loadArray();
-        unset($this->array[$offset]);
+        $this->loadInner();
+        $this->inner->offsetUnset($offset);
         $this->string = null;
-    }
-
-    public function serialize() : string
-    {
-        return $this->toString();
-    }
-
-    public function unserialize($serialized) : Json
-    {
-        return self::fromString($serialized);
     }
 
     private function loadString() : void
@@ -112,51 +91,29 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Seria
             return;
         }
 
-        try {
-            $this->string = \json_encode($this->array, self::FLAGS);
-            $this->valid = true;
-        } catch (\JsonException $exception) {
-            $this->valid = false;
-        }
+        $this->string = $this->inner->toString();
     }
 
-    private function loadArray() : void
+    private function loadInner() : void
     {
-        if (\is_array($this->array)) {
+        if ($this->inner instanceof \Infinityloop\Utils\Json\JsonContract) {
             return;
         }
 
-        try {
-            $this->array = \json_decode($this->string, true, 512, self::FLAGS);
-            $this->valid = true;
-        } catch (\JsonException $exception) {
-            $this->valid = false;
+        $result = \json_decode(json: $this->string, associative: false, flags: self::FLAGS);
+
+        if (\is_array($result)) {
+            $this->inner = \Infinityloop\Utils\Json\SequentialJson::fromNative($result);
+
+            return;
         }
-    }
 
-    public function __toString() : string
-    {
-        return $this->toString();
-    }
+        if ($result instanceof \stdClass) {
+            $this->inner = \Infinityloop\Utils\Json\MapJson::fromNative($result);
 
-    public function __isset($offset) : bool
-    {
-        return $this->offsetExists($offset);
-    }
+            return;
+        }
 
-    /** @return int|string|bool|array */
-    public function __get($offset)
-    {
-        return $this->offsetGet($offset);
-    }
-
-    public function __set($offset, $value) : void
-    {
-        $this->offsetSet($offset, $value);
-    }
-
-    public function __unset($offset) : void
-    {
-        $this->offsetUnset($offset);
+        throw new \RuntimeException('Required JSON list or object, got scalar.');
     }
 }
