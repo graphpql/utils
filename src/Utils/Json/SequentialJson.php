@@ -102,7 +102,7 @@ final class SequentialJson extends \Infinityloop\Utils\Json\JsonContract
 
         $result = \json_decode(json: $this->string, associative: false, flags: self::FLAGS);
 
-        if (!\is_array($this->data)) {
+        if (!\is_array($result)) {
             throw new \RuntimeException('Required JSON list, got scalar or object.');
         }
 

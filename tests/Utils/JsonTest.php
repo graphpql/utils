@@ -134,7 +134,6 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         $instance = \Infinityloop\Utils\Json\MapJson::fromString('{"name":"Rosta"}');
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
-        self::assertInstanceOf(\stdClass::class, $instance);
         self::assertSame('Rosta', $instance->name);
     }
 
