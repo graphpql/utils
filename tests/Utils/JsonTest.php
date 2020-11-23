@@ -93,4 +93,32 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
 
         self::assertSame('{"name":"Rosta"}', $instance->toString());
     }
+
+    public function testListJson() : void
+    {
+        $instance = \Infinityloop\Utils\Json::fromString('[{"name":"Rosta"}, {"name":"Rosta"}, {"name":"Rosta"}]');
+
+        self::assertCount(3, $instance);
+        self::assertArrayHasKey(0, $instance);
+        self::assertArrayHasKey(1, $instance);
+        self::assertArrayHasKey(2, $instance);
+        self::assertArrayNotHasKey(3, $instance);
+        self::assertInstanceOf(\stdClass::class, $instance[0]);
+        self::assertSame('Rosta', $instance[0]->name);
+    }
+
+    public function testInvalidJson() : void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $instance = \Infinityloop\Utils\Json::fromString('"string json"');
+        $instance->toNative();
+    }
+
+    public function testInvalidSequentialJson() : void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        \Infinityloop\Utils\Json::fromNative(['name' => 'Rosta']);
+    }
 }
