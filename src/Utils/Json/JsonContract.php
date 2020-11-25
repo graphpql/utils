@@ -14,7 +14,7 @@ abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAcc
         \JSON_UNESCAPED_SLASHES |
         \JSON_PRESERVE_ZERO_FRACTION;
 
-    abstract public static function fromString(string $json) : self;
+    abstract public static function fromString(string $json) : static;
 
     abstract public function toString() : string;
 

@@ -15,7 +15,7 @@ final class MapJson extends \Infinityloop\Utils\Json\JsonContract
         $this->data = $data;
     }
 
-    public static function fromString(string $json) : self
+    public static function fromString(string $json) : static
     {
         return new self($json, null);
     }

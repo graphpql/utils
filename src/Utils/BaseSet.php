@@ -12,7 +12,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
 
     protected array $array = [];
 
-    public function merge(self $objectSet, bool $allowReplace = false) : self
+    public function merge(self $objectSet, bool $allowReplace = false) : static
     {
         if (!$objectSet instanceof static) {
             throw new \Exception('I can only merge Sets of same type');
@@ -83,7 +83,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
         unset($this->array[$offset]);
     }
 
-    abstract protected function mergeImpl(self $objectSet, bool $allowReplace) : self;
+    abstract protected function mergeImpl(self $objectSet, bool $allowReplace) : static;
 
     abstract protected function offsetSetImpl($offset, object $object) : void;
 }

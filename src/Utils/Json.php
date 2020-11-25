@@ -15,7 +15,7 @@ final class Json extends \Infinityloop\Utils\Json\JsonContract
         $this->inner = $data;
     }
 
-    public static function fromString(string $json) : self
+    public static function fromString(string $json) : static
     {
         return new self($json, null);
     }
