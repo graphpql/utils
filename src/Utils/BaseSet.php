@@ -9,13 +9,14 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     use \Nette\SmartObject;
 
     protected const INNER_CLASS = self::class;
+    protected const EXCEPTION_UNKNOWN_OFFSET = \Infinityloop\Utils\Exception\UnknownOffset::class;
 
     protected array $array = [];
 
     public function merge(self $objectSet, bool $allowReplace = false) : static
     {
         if (!$objectSet instanceof static) {
-            throw new \Infinityloop\Utils\Exception\InvalidSetTypeToMerge();
+            throw new \Infinityloop\Utils\Exception\InvalidTypeToMerge();
         }
 
         return $this->mergeImpl($objectSet, $allowReplace);
@@ -59,25 +60,29 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function offsetGet($offset) : object
     {
         if (!$this->offsetExists($offset)) {
-            throw new \Infinityloop\Utils\Exception\InvalidItem();
+            $exception = static::EXCEPTION_UNKNOWN_OFFSET;
+
+            throw new $exception($offset);
         }
 
         return $this->array[$offset];
     }
 
-    public function offsetSet($offset, $object) : void
+    public function offsetSet($offset, $value) : void
     {
-        if (!\is_a($object, static::INNER_CLASS)) {
-            throw new \Infinityloop\Utils\Exception\InvalidInput();
+        if (!\is_a($value, static::INNER_CLASS)) {
+            throw new \Infinityloop\Utils\Exception\InvalidInput(static::INNER_CLASS);
         }
 
-        $this->offsetSetImpl($offset, $object);
+        $this->offsetSetImpl($offset, $value);
     }
 
     public function offsetUnset($offset) : void
     {
         if (!$this->offsetExists($offset)) {
-            throw new \Infinityloop\Utils\Exception\InvalidItem();
+            $exception = static::EXCEPTION_UNKNOWN_OFFSET;
+
+            throw new $exception($offset);
         }
 
         unset($this->array[$offset]);

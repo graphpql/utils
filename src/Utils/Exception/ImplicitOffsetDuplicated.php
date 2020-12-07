@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Utils\Exception;
 
-final class InvalidSetTypeToMerge extends \Exception
+final class ImplicitOffsetDuplicated extends \Exception
 {
-    public const MESSAGE = 'I can only merge Sets of same type.';
+    public const MESSAGE = 'This item already exists in Map, use explicit key if you wish to replace it.';
 
     public function __construct()
     {

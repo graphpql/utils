@@ -68,8 +68,8 @@ final class ObjectMapTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetSet() : void
     {
-        $this->expectException(\Infinityloop\Utils\Exception\InvalidObjectOffset::class);
-        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidObjectOffset::MESSAGE);
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidMapOffset::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidMapOffset::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet();
         $instance[1] = new \Infinityloop\Tests\Utils\NamedClass('a');
