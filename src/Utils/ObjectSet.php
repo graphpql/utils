@@ -43,6 +43,6 @@ abstract class ObjectSet extends \Infinityloop\Utils\BaseSet
             return;
         }
 
-        throw new \Exception('Invalid offset for given object.');
+        throw new \Infinityloop\Utils\Exception\InvalidObjectOffset();
     }
 }

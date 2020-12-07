@@ -90,8 +90,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetGet() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Item doesnt exist.');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidItem::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidItem::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\EmptyClass(),
@@ -114,8 +114,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetSet() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid offset for given object.');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidObjectOffset::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidObjectOffset::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $instance['abc'] = new \Infinityloop\Tests\Utils\EmptyClass();
@@ -152,8 +152,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetUnset() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Item already doesnt exist.');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidItem::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidItem::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $instance->offsetUnset(0);
@@ -201,8 +201,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testMergeInvalid() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('I can only merge Sets of same type');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidSetTypeToMerge::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidSetTypeToMerge::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
         $secondInstance = new \Infinityloop\Tests\Utils\NamedClassSet([]);
@@ -212,8 +212,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidInput() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid input.');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidInput::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidInput::MESSAGE);
 
         new \Infinityloop\Tests\Utils\EmptyClassSet([
             new \Infinityloop\Tests\Utils\NamedClass('a'),
@@ -222,8 +222,8 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidInputScalar() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid input.');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidInput::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidInput::MESSAGE);
 
         new \Infinityloop\Tests\Utils\EmptyClassSet([
             'bla',

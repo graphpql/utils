@@ -48,8 +48,8 @@ final class ObjectMapTest extends \PHPUnit\Framework\TestCase
 
     public function testMergeNoReplace() : void
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Item already exists, use $allowReplace if you wish to replace');
+        $this->expectException(\Infinityloop\Utils\Exception\ItemAlreadyExists::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\ItemAlreadyExists::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet([
             'a' => new \Infinityloop\Tests\Utils\NamedClass('a'),
@@ -68,10 +68,10 @@ final class ObjectMapTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidOffsetSet() : void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid offset for given object');
+        $this->expectException(\Infinityloop\Utils\Exception\InvalidObjectOffset::class);
+        $this->expectExceptionMessage(\Infinityloop\Utils\Exception\InvalidObjectOffset::MESSAGE);
 
         $instance = new \Infinityloop\Tests\Utils\NamedClassSet();
-        $instance[1] = new NamedClass('a');
+        $instance[1] = new \Infinityloop\Tests\Utils\NamedClass('a');
     }
 }

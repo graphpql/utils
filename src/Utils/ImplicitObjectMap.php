@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Utils;
 
-abstract class ImplicitObjectMap extends ObjectMap
+abstract class ImplicitObjectMap extends \Infinityloop\Utils\ObjectMap
 {
     public function __construct(array $data = [])
     {
@@ -13,7 +13,7 @@ abstract class ImplicitObjectMap extends ObjectMap
         foreach ($data as $key => $object) {
             $this->offsetSet(\is_string($key)
                 ? $key
-                : null , $object);
+                : null, $object);
         }
     }
 
@@ -31,7 +31,7 @@ abstract class ImplicitObjectMap extends ObjectMap
 
         if ($offset === null) {
             if ($this->offsetExists($key)) {
-                throw new \Exception('Duplicated item');
+                throw new \Infinityloop\Utils\Exception\DuplicateItem();
             }
 
             parent::offsetSetImpl($key, $object);
@@ -39,6 +39,6 @@ abstract class ImplicitObjectMap extends ObjectMap
             return;
         }
 
-        throw new \Exception('Offset does not match implicit offset');
+        throw new \Infinityloop\Utils\Exception\ImplicitOffsetNotMatch();
     }
 }
