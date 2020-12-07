@@ -18,7 +18,7 @@ abstract class ObjectSet extends \Infinityloop\Utils\BaseSet
         return \key($this->array);
     }
 
-    protected function mergeImpl(BaseSet $objectSet, bool $allowReplace = false) : self
+    protected function mergeImpl(BaseSet $objectSet, bool $allowReplace = false) : static
     {
         foreach ($objectSet as $offset => $object) {
             $this->offsetSet($allowReplace
