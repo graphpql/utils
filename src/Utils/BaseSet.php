@@ -87,6 +87,17 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
 
         unset($this->array[$offset]);
     }
+    
+    public function __clone() : void
+    {
+        $newArray = [];
+        
+        foreach ($this as $key => $object) {
+            $newArray[$key] = clone $object;
+        }
+        
+        $this->array = $newArray;
+    }
 
     abstract protected function mergeImpl(self $objectSet, bool $allowReplace) : static;
 
