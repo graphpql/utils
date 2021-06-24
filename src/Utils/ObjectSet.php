@@ -17,11 +17,11 @@ abstract class ObjectSet extends \Infinityloop\Utils\BaseSet
     {
         return \key($this->array);
     }
-    
+
     public function reindex() : static
     {
         $this->array = \array_values($this->array);
-        
+
         return $this;
     }
 

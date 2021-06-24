@@ -19,7 +19,7 @@
     "phpunit/phpunit": "^9.1",
     "infection/infection": "^0.20",
     "phpstan/phpstan": "^0.12",
-    "infinityloop-dev/coding-standard": "^0.1"
+    "infinityloop-dev/coding-standard": "^0.2"
   },
   "scripts": {
     "phpunit": "phpunit tests",
@@ -27,7 +27,8 @@
     "phpstan": "phpstan analyze --level 2 src",
     "phpstan-next": "phpstan analyze --level 3 src",
     "phpstan-max": "phpstan analyze --level max src",
-    "codestyle": "phpcs --standard=vendor/infinityloop-dev/coding-standard/InfinityloopCodingStandard/ruleset.xml --extensions=php src tests"
+    "codestyle": "phpcs --standard=vendor/infinityloop-dev/coding-standard/InfinityloopCodingStandard/ruleset.xml --extensions=php src tests",
+    "codestyle-fix": "phpcbf --standard=vendor/infinityloop-dev/coding-standard/InfinityloopCodingStandard/ruleset.xml --extensions=php src tests"
   },
   "autoload": {
     "psr-4": {

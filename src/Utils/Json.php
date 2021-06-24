@@ -15,18 +15,18 @@ final class Json extends \Infinityloop\Utils\Json\JsonContract
         $this->inner = $data;
     }
 
-    public static function fromString(string $json) : static
-    {
-        return new self($json, null);
-    }
-
     public static function fromNative(array|\stdClass $data) : self
     {
         if (\is_array($data) && (\count($data) === 0 || \array_key_first($data) === 0)) {
-            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));   
+            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));
         }
 
         return new self(null, \Infinityloop\Utils\Json\MapJson::fromNative((object) $data));
+    }
+
+    public static function fromString(string $json) : static
+    {
+        return new self($json, null);
     }
 
     public function toString() : string

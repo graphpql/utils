@@ -251,6 +251,6 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Infinityloop\Utils\Exception\InvalidInput::class);
         $this->expectExceptionMessage(\sprintf(\Infinityloop\Utils\Exception\InvalidInput::MESSAGE, EmptyClass::class));
 
-        $res = new \Infinityloop\Tests\Utils\EmptyClassSet(['bla']);
+        new \Infinityloop\Tests\Utils\EmptyClassSet(['bla']);
     }
 }

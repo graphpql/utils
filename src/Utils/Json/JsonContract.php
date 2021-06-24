@@ -8,11 +8,10 @@ abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAcc
 {
     use \Nette\SmartObject;
 
-    protected const FLAGS =
-        \JSON_THROW_ON_ERROR |
-        \JSON_UNESCAPED_UNICODE |
-        \JSON_UNESCAPED_SLASHES |
-        \JSON_PRESERVE_ZERO_FRACTION;
+    protected const FLAGS = \JSON_THROW_ON_ERROR
+        | \JSON_UNESCAPED_UNICODE
+        | \JSON_UNESCAPED_SLASHES
+        | \JSON_PRESERVE_ZERO_FRACTION;
 
     abstract public static function fromString(string $json) : static;
 

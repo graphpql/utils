@@ -7,26 +7,27 @@ namespace Infinityloop\Utils\Json;
 final class SequentialJson extends \Infinityloop\Utils\Json\JsonContract
 {
     private ?string $string;
-    private ?array $data;
 
-    private function __construct(?string $json, ?array $data)
+    private function __construct(
+        ?string $json,
+        private ?array $data,
+    )
     {
         if (\is_array($data) && \array_key_first($data) !== 0) {
             throw new \RuntimeException('Associative array detected, use MapJson instead.');
         }
 
         $this->string = $json;
-        $this->data = $data;
-    }
-
-    public static function fromString(string $json) : static
-    {
-        return new self($json, null);
     }
 
     public static function fromNative(array $data) : self
     {
         return new self(null, $data);
+    }
+
+    public static function fromString(string $json) : static
+    {
+        return new self($json, null);
     }
 
     public function toString() : string

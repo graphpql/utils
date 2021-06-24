@@ -51,11 +51,11 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     {
         return \count($this->array);
     }
-    
+
     public function getFirst() : ?object
     {
         $key = \array_key_first($this->array);
-        
+
         return $key === null
             ? null
             : $this->array[$key];
@@ -64,7 +64,7 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     public function getLast() : ?object
     {
         $key = \array_key_last($this->array);
-        
+
         return $key === null
             ? null
             : $this->array[$key];
@@ -105,19 +105,19 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
 
         unset($this->array[$offset]);
     }
-    
-    public function __clone() : void
-    {
-        $newArray = [];
-        
-        foreach ($this as $key => $object) {
-            $newArray[$key] = clone $object;
-        }
-        
-        $this->array = $newArray;
-    }
 
     abstract protected function mergeImpl(self $objectSet, bool $allowReplace) : static;
 
     abstract protected function offsetSetImpl($offset, object $object) : void;
+
+    public function __clone() : void
+    {
+        $newArray = [];
+
+        foreach ($this as $key => $object) {
+            $newArray[$key] = clone $object;
+        }
+
+        $this->array = $newArray;
+    }
 }

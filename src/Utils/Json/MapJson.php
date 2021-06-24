@@ -7,22 +7,23 @@ namespace Infinityloop\Utils\Json;
 final class MapJson extends \Infinityloop\Utils\Json\JsonContract
 {
     private ?string $string;
-    private ?\stdClass $data;
 
-    private function __construct(?string $json, ?\stdClass $data)
+    private function __construct(
+        ?string $json,
+        private ?\stdClass $data,
+    )
     {
         $this->string = $json;
-        $this->data = $data;
-    }
-
-    public static function fromString(string $json) : static
-    {
-        return new self($json, null);
     }
 
     public static function fromNative(\stdClass $data) : self
     {
         return new self(null, $data);
+    }
+
+    public static function fromString(string $json) : static
+    {
+        return new self($json, null);
     }
 
     public function toString() : string
