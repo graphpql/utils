@@ -18,6 +18,32 @@ final class ObjectSetTest extends \PHPUnit\Framework\TestCase
         self::assertArrayHasKey(1, $array);
     }
 
+    public function testGetFirstLast() : void
+    {
+        $first = new \Infinityloop\Tests\Utils\EmptyClass();
+        $last = new \Infinityloop\Tests\Utils\EmptyClass();
+
+        $array = new \Infinityloop\Tests\Utils\EmptyClassSet([
+            $first,
+            $last,
+        ]);
+
+        self::assertCount(2, $array);
+        self::assertArrayHasKey(0, $array);
+        self::assertArrayHasKey(1, $array);
+        self::assertEquals($first, $array->getFirst());
+        self::assertEquals($last, $array->getLast());
+    }
+
+    public function testGetFirstLastEmpty() : void
+    {
+        $array = new \Infinityloop\Tests\Utils\EmptyClassSet([]);
+
+        self::assertCount(0, $array);
+        self::assertNull($array->getFirst());
+        self::assertNull($array->getLast());
+    }
+
     public function testIterator() : void
     {
         $instance = new \Infinityloop\Tests\Utils\EmptyClassSet([

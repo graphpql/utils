@@ -137,18 +137,19 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertSame('Rosta', $instance->name);
     }
 
+    public function testMapJsonFromMapArray() : void
+    {
+        $instance = \Infinityloop\Utils\Json::fromNative(['name' => 'Rosta']);
+
+        self::assertSame('{"name":"Rosta"}', $instance->toString());
+        self::assertSame('Rosta', $instance->name);
+    }
+
     public function testInvalidScalarJson() : void
     {
         $this->expectException(\RuntimeException::class);
 
         $instance = \Infinityloop\Utils\Json::fromString('"string json"');
         $instance->toNative();
-    }
-
-    public function testInvalidSequentialJson() : void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        \Infinityloop\Utils\Json::fromNative(['name' => 'Rosta']);
     }
 }
