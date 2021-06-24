@@ -51,6 +51,24 @@ abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
     {
         return \count($this->array);
     }
+    
+    public function getFirst() : ?object
+    {
+        $key = \array_key_first($this->array);
+        
+        return $key === null
+            ? null
+            : $this->array[$key];
+    }
+
+    public function getLast() : ?object
+    {
+        $key = \array_key_last($this->array);
+        
+        return $key === null
+            ? null
+            : $this->array[$key];
+    }
 
     public function offsetExists($offset) : bool
     {
