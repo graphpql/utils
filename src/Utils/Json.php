@@ -22,11 +22,11 @@ final class Json extends \Infinityloop\Utils\Json\JsonContract
 
     public static function fromNative(array|\stdClass $data) : self
     {
-        if (\is_array($data)) {
-            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));
+        if (\is_array($data) && (\count($data) === 0 || \array_key_first($data) === 0)) {
+            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));   
         }
 
-        return new self(null, \Infinityloop\Utils\Json\MapJson::fromNative($data));
+        return new self(null, \Infinityloop\Utils\Json\MapJson::fromNative((object) $data));
     }
 
     public function toString() : string
