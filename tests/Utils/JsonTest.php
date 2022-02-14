@@ -89,19 +89,6 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->__toString());
     }
 
-    public function testSerialize() : void
-    {
-        self::assertSame('{"name":"Rosta"}', \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}')->serialize());
-    }
-
-    public function testUnserialize() : void
-    {
-        $instance = \Infinityloop\Utils\Json::fromString('{"name":"Rosta"}');
-        $instance->unserialize('{"name":"Rosta"}');
-
-        self::assertSame('{"name":"Rosta"}', $instance->toString());
-    }
-
     public function testSequentialJson() : void
     {
         $instance = \Infinityloop\Utils\Json::fromString('[{"name":"Rosta"}, {"name":"Rosta"}, {"name":"Rosta"}]');
