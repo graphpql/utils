@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Utils\Json;
 
-abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable, \Stringable
+abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAccess, \Stringable
 {
     use \Nette\SmartObject;
 
@@ -18,16 +18,6 @@ abstract class JsonContract implements \Countable, \IteratorAggregate, \ArrayAcc
     abstract public function toString() : string;
 
     abstract public function toNative() : array|\stdClass;
-
-    public function serialize() : string
-    {
-        return $this->toString();
-    }
-
-    public function unserialize($serialized) : \Infinityloop\Utils\Json
-    {
-        return \Infinityloop\Utils\Json::fromString($serialized);
-    }
 
     public function __toString() : string
     {
