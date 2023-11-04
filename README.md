@@ -30,7 +30,7 @@ $json = Json::fromString($jsonString);      // (no decoding is done at this step
 
 $json['foo'] = 'bar';                       // adding/updating values (decoding is done on this step)
 unset($json['foo2']);                       // removing value
-$json->foo3= 'bar3;                         // magic interface is also available
+$json->foo3 = 'bar3;                        // oop interface is also available
 
 $jsonString = $json->toString();            // (encoding of updated array into string again)
 $jsonString = $json->toString();            // (no encoding is done, because previously encoded string is up to date)
