@@ -4,29 +4,28 @@ declare(strict_types = 1);
 
 namespace Infinityloop\Utils;
 
-final class Json extends \Infinityloop\Utils\Json\JsonContract
+final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Stringable
 {
-    private ?string $string;
-    private ?\Infinityloop\Utils\Json\JsonContract $inner;
-
-    private function __construct(?string $json, ?\Infinityloop\Utils\Json\JsonContract $data)
+    private function __construct(
+        private ?string $string,
+        private ?array $data,
+        private ?bool $isObject,
+    )
     {
-        $this->string = $json;
-        $this->inner = $data;
     }
 
     public static function fromNative(array|\stdClass $data) : self
     {
-        if (\is_array($data) && (\count($data) === 0 || \array_key_first($data) === 0)) {
-            return new self(null, \Infinityloop\Utils\Json\SequentialJson::fromNative($data));
+        if (\is_array($data) && (\count($data) === 0 || \array_is_list($data))) {
+            return new self(null, $data, false);
         }
 
-        return new self(null, \Infinityloop\Utils\Json\MapJson::fromNative((object) $data));
+        return new self(null, (array) $data, true);
     }
 
-    public static function fromString(string $json) : static
+    public static function fromString(string $json) : self
     {
-        return new self($json, null);
+        return new self($json, null, null);
     }
 
     public function toString() : string
@@ -40,48 +39,50 @@ final class Json extends \Infinityloop\Utils\Json\JsonContract
     {
         $this->loadInner();
 
-        return $this->inner->toNative();
+        return $this->isObject
+            ? (object) $this->data
+            : $this->data;
     }
 
     public function count() : int
     {
         $this->loadInner();
 
-        return $this->inner->count();
+        return \count($this->data);
     }
 
     public function getIterator() : \Traversable
     {
         $this->loadInner();
 
-        return $this->inner->getIterator();
+        return new \ArrayIterator($this->data);
     }
 
     public function offsetExists($offset) : bool
     {
         $this->loadInner();
 
-        return $this->inner->offsetExists($offset);
+        return \array_key_exists($offset, $this->data);
     }
 
     public function offsetGet($offset) : int|string|float|bool|array|\stdClass|null
     {
         $this->loadInner();
 
-        return $this->inner->offsetGet($offset);
+        return $this->data[$offset];
     }
 
     public function offsetSet($offset, $value) : void
     {
         $this->loadInner();
-        $this->inner->offsetSet($offset, $value);
+        $this->data[$offset] = $value;
         $this->string = null;
     }
 
     public function offsetUnset($offset) : void
     {
         $this->loadInner();
-        $this->inner->offsetUnset($offset);
+        unset($this->data[$offset]);
         $this->string = null;
     }
 
@@ -91,29 +92,54 @@ final class Json extends \Infinityloop\Utils\Json\JsonContract
             return;
         }
 
-        $this->string = $this->inner->toString();
+        $this->string = \json_encode(
+            $this->data,
+            flags: \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION,
+        );
     }
 
     private function loadInner() : void
     {
-        if ($this->inner instanceof \Infinityloop\Utils\Json\JsonContract) {
+        if (\is_array($this->data) && \is_bool($this->isObject)) {
             return;
         }
 
-        $result = \json_decode(json: $this->string, associative: false, flags: self::FLAGS);
+        $result = \json_decode(
+            json: $this->string,
+            associative: false,
+            flags: \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION,
+        );
 
-        if (\is_array($result)) {
-            $this->inner = \Infinityloop\Utils\Json\SequentialJson::fromNative($result);
+        $this->isObject = match (true) {
+            \is_array($result) => true,
+            $result instanceof \stdClass => false,
+            default => throw new \RuntimeException('Required JSON list or object, got scalar.')
+        };
+        $this->data = (array) $result;
+    }
 
-            return;
-        }
+    public function __toString() : string
+    {
+        return $this->toString();
+    }
 
-        if ($result instanceof \stdClass) {
-            $this->inner = \Infinityloop\Utils\Json\MapJson::fromNative($result);
+    public function __isset($name) : bool
+    {
+        return $this->offsetExists($name);
+    }
 
-            return;
-        }
+    public function __get($name) : int|string|float|bool|array|\stdClass|null
+    {
+        return $this->offsetGet($name);
+    }
 
-        throw new \RuntimeException('Required JSON list or object, got scalar.');
+    public function __set($name, $value) : void
+    {
+        $this->offsetSet($name, $value);
+    }
+
+    public function __unset($name) : void
+    {
+        $this->offsetUnset($name);
     }
 }

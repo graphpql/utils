@@ -6,8 +6,6 @@ namespace Infinityloop\Utils;
 
 final class CaseConverter
 {
-    use \Nette\StaticClass;
-
     public static function toPascalCase(string $string) : string
     {
         return \implode('', self::splitWords($string, true));

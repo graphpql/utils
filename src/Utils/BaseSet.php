@@ -6,8 +6,6 @@ namespace Infinityloop\Utils;
 
 abstract class BaseSet implements \Iterator, \ArrayAccess, \Countable
 {
-    use \Nette\SmartObject;
-
     protected const INNER_CLASS = self::class;
     protected const EXCEPTION_UNKNOWN_OFFSET = \Infinityloop\Utils\Exception\UnknownOffset::class;
 

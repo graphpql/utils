@@ -102,28 +102,6 @@ final class JsonTest extends \PHPUnit\Framework\TestCase
         self::assertSame('Rosta', $instance[0]->name);
     }
 
-    public function testDirectSequentialJson() : void
-    {
-        $instance = \Infinityloop\Utils\Json\SequentialJson::fromString('[{"name":"Rosta"}, {"name":"Rosta"}, {"name":"Rosta"}]');
-
-        self::assertSame('[{"name":"Rosta"}, {"name":"Rosta"}, {"name":"Rosta"}]', $instance->toString());
-        self::assertCount(3, $instance);
-        self::assertArrayHasKey(0, $instance);
-        self::assertArrayHasKey(1, $instance);
-        self::assertArrayHasKey(2, $instance);
-        self::assertArrayNotHasKey(3, $instance);
-        self::assertInstanceOf(\stdClass::class, $instance[0]);
-        self::assertSame('Rosta', $instance[0]->name);
-    }
-
-    public function testDirectMapJson() : void
-    {
-        $instance = \Infinityloop\Utils\Json\MapJson::fromString('{"name":"Rosta"}');
-
-        self::assertSame('{"name":"Rosta"}', $instance->toString());
-        self::assertSame('Rosta', $instance->name);
-    }
-
     public function testMapJsonFromMapArray() : void
     {
         $instance = \Infinityloop\Utils\Json::fromNative(['name' => 'Rosta']);
