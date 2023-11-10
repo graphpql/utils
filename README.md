@@ -1,4 +1,4 @@
-# Utils [![PHP](https://github.com/graphpql/utils/workflows/PHP/badge.svg?branch=master)](https://github.com/graphpql/utils/actions?query=workflow%3APHP)
+# Utils [![PHP](https://github.com/graphpql/utils/actions/workflows/php.yml/badge.svg)](https://github.com/graphpql/utils/actions/workflows/php.yml)
 
 :hammer: Common utility classes for infinityloop packages.
 
