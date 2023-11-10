@@ -25,7 +25,7 @@ composer require infinityloop-dev/utils
 
 Json wrapper which allows you to work with Json as if it was array. Decoding and encoding is fully lazy.
 
-```
+```php
 $json = Json::fromString($jsonString);      // (no decoding is done at this step)
 
 $json['foo'] = 'bar';                       // adding/updating values (decoding is done on this step)
@@ -40,7 +40,7 @@ $jsonString = $json->toString();            // (no encoding is done, because pre
 
 Simple class which transforms case of strings.
 
-```
+```php
 $string = 'foo-bar_bazFoo123baz';
 
 CaseConverter::toCamelCase($string);        // fooBarBazFoo123Baz
@@ -54,7 +54,7 @@ CaseConverter::splitWords($string);         // [ foo, bar, baz, foo, 123, baz ]
 
 Typesafe array of objects of a same type.
 
-```
+```php
 class Foo { public string $name; public function __construct(string $name) { $this->name = $name; } }
 class FooSet extends ObjectSet { protected const INNER_CLASS = Foo::class; }
 
