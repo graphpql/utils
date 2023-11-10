@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This component provides some utility classes which are used across infinityloop packages.
+This component provides some utility classes which are used across organisation packages.
 
 ## Installation
 
@@ -16,8 +16,7 @@ composer require infinityloop-dev/utils
 
 ## Dependencies
 
-- PHP >= 7.4
-- [nette/utils](https://github.com/nette/utils)
+- PHP >= 8.1
 
 ## Classes
 
