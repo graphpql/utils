@@ -111,8 +111,8 @@ final class Json implements \Countable, \IteratorAggregate, \ArrayAccess, \Strin
         );
 
         $this->isObject = match (true) {
-            \is_array($result) => true,
-            $result instanceof \stdClass => false,
+            \is_array($result) => false,
+            $result instanceof \stdClass => true,
             default => throw new \RuntimeException('Required JSON list or object, got scalar.')
         };
         $this->data = (array) $result;
